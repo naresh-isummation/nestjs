@@ -15,7 +15,7 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return userObj.filter((currentValue) => currentValue.id === id);
+    return userObj.find((currentValue) => currentValue.id === id);
     //return `This action returns a #${id} user`;
   }
 
@@ -24,25 +24,17 @@ export class UsersService {
       (currentValue) => currentValue.id === id,
     );
     console.log('objIndex ', objIndex);
-    if (objIndex === -1) {
-      return 'No record Found';
-    } else {
-      for (const key in updateUserDto) {
-        userObj[objIndex][key] = updateUserDto[key];
-      }
-      return userObj[objIndex];
+    for (const key in updateUserDto) {
+      userObj[objIndex][key] = updateUserDto[key];
     }
+    return userObj[objIndex];
   }
 
   remove(id: number) {
     const objIndex = userObj.findIndex(
       (currentValue) => currentValue.id === id,
     );
-    if (objIndex === -1) {
-      return 'No record Found';
-    } else {
-      return userObj.splice(objIndex, 1)[0];
-    }
+    return userObj.splice(objIndex, 1)[0];
     //return `This action removes a #${id} user`;
   }
 }

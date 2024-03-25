@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -27,16 +29,30 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    const user = this.usersService.findOne(+id);
+    if (!user) {
+      throw new HttpException('No record Found', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    const user = this.usersService.findOne(+id);
+    if (!user) {
+      throw new HttpException('No record Found', HttpStatus.NOT_FOUND);
+    } else {
+      return this.usersService.update(+id, updateUserDto);
+    }
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    const user = this.usersService.findOne(+id);
+    if (!user) {
+      throw new HttpException('No record Found', HttpStatus.NOT_FOUND);
+    } else {
+      return this.usersService.remove(+id);
+    }
   }
 }
