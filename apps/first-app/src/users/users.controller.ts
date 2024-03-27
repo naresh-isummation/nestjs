@@ -12,13 +12,18 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { timeStampPipe } from '@app/common/pipe/timestamp.pipe'; // Import the TimestampDatePipe
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(
+    @Body() createUserDto: CreateUserDto,
+    @Body('createdDate', timeStampPipe) createdDate: Date,
+  ) {
+    console.log('createdDate', typeof createdDate, createdDate);
     return this.usersService.create(createUserDto);
   }
 
